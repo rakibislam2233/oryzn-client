@@ -1,7 +1,11 @@
+"use client";
 
 import BrowseCategories from "@/components/shared/BrowseCategories";
 import { Footer } from "@/components/shared/Footer";
 import Navbar from "@/components/shared/Navbar";
+import ShopSidebar from "@/components/shared/ShopSidebar";
+import { usePathname } from "next/navigation";
+import React from "react";
 
 
 const PublicLayout = ({
@@ -9,6 +13,9 @@ const PublicLayout = ({
 }: {
     children: React.ReactNode;
 }) => {
+    const pathname = usePathname();
+    const isShopPage = pathname?.startsWith('/shop');
+
     return (
         <div className="flex min-h-screen flex-col bg-background font-sans antialiased">
             <Navbar />
@@ -16,8 +23,8 @@ const PublicLayout = ({
             {/* Main Content Area with Fixed Sidebar */}
             <div className="container mx-auto px-4 py-6">
                 <div className="flex flex-col lg:flex-row gap-6 items-start">
-                    {/* Sidebar - Hidden on mobile, fixed width on desktop */}
-                    <BrowseCategories />
+                    {/* Sidebar - Dynamic based on route */}
+                    {isShopPage ? <ShopSidebar /> : <BrowseCategories />}
 
                     {/* Page Content */}
                     <main className="flex-1 w-full min-w-0">
