@@ -1,5 +1,5 @@
+import ProductCard from '@/components/common/ProductCard';
 import { Product } from '@/components/shared/BrowseCategories';
-import ProductCard from '@/components/shared/ProductCard';
 import React from 'react';
 const products: Product[] = [
     {

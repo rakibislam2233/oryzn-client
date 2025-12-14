@@ -1,76 +1,65 @@
-import { Eye, Heart, ShoppingBag, Star } from "lucide-react";
+import React from 'react';
+import { Product } from '../shared/BrowseCategories';
 
 interface ProductCardProps {
-    name: string;
-    price: number;
-    originalPrice?: number;
-    rating: number;
-    image: string;
-    category: string;
-    isNew?: boolean;
-    discount?: number;
+    product: Product;
 }
 
-export const ProductCard = ({ name, price, originalPrice, rating, image, category, isNew, discount }: ProductCardProps) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     return (
-        <div className="group relative transition-all hover:shadow-lg hover:shadow-primary/10 rounded-lg p-2">
-            {/* Badges */}
-            <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
-                {discount && (
-                    <span className="bg-destructive text-destructive-foreground text-xs font-medium px-2 py-1 rounded">
-                        Sale {discount}%
-                    </span>
-                )}
-                {isNew && (
-                    <span className="bg-[#00B207] text-white text-xs font-medium px-2 py-1 rounded">
-                        New
-                    </span>
-                )}
+        <div className="bg-surface-light dark:bg-surface-dark rounded-xl border border-gray-100 dark:border-gray-800 p-4 shadow-card hover:shadow-card-hover transition-all duration-300 group relative">
+            {product.badge && (
+                <span className={`absolute top-4 left-4 text-white text-[10px] font-bold px-2 py-1 rounded ${product.badge.colorClass}`}>
+                    {product.badge.text}
+                </span>
+            )}
+            <button className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors">
+                <span className="material-symbols-outlined">favorite</span>
+            </button>
+
+            <div className="h-40 w-full mb-4 rounded-lg overflow-hidden bg-white flex items-center justify-center p-2">
+                <img
+                    src={product.image}
+                    alt={product.name}
+                    className="h-full object-contain mix-blend-multiply dark:mix-blend-normal"
+                />
             </div>
 
-            {/* Hover Actions */}
-            <div className="absolute top-4 right-4 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <button className="h-9 w-9 rounded-full bg-background border shadow-sm flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors">
-                    <Heart className="h-4 w-4" />
-                </button>
-                <button className="h-9 w-9 rounded-full bg-background border shadow-sm flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors">
-                    <Eye className="h-4 w-4" />
-                </button>
-            </div>
+            <div className="flex flex-col gap-1">
+                <span className="text-xs text-text-muted">{product.category}</span>
+                <a href="#" className="font-bold text-text-main dark:text-gray-100 hover:text-primary transition-colors line-clamp-2 min-h-[48px]">
+                    {product.name}
+                </a>
 
-            {/* Image */}
-            <div className="relative aspect-square mb-3 overflow-hidden rounded-md">
-                <div className="w-full h-full flex items-center justify-center bg-gray-50 group-hover:bg-gray-100 transition-colors">
-                    {/* Placeholder Emoji - Replace with Next/Image */}
-                    <span className="text-6xl drop-shadow-sm filter grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110">🍎</span>
-                </div>
-            </div>
+                <div className="flex items-center gap-1 mb-1">
+                    {[1, 2, 3, 4, 5].map((star) => {
+                        const isFilled = star <= Math.floor(product.rating);
+                        const isHalf = star === Math.ceil(product.rating) && !Number.isInteger(product.rating);
 
-            {/* Content */}
-            <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                    <h3 className="font-medium text-foreground text-sm group-hover:text-primary transition-colors line-clamp-1">
-                        {name}
-                    </h3>
-                    <div className="flex items-center gap-1">
-                        <span className="font-bold text-foreground group-hover:text-primary transition-colors">${price.toFixed(2)}</span>
-                        {originalPrice && (
-                            <span className="text-xs text-muted-foreground line-through">${originalPrice.toFixed(2)}</span>
-                        )}
-                    </div>
-
-                    <div className="flex text-yellow-400">
-                        {[...Array(5)].map((_, i) => (
-                            <Star key={i} className={`h-3 w-3 ${i < rating ? "fill-current" : "text-gray-200 fill-gray-200"}`} />
-                        ))}
-                    </div>
+                        return (
+                            <span key={star} className={`material-symbols-outlined text-sm ${isFilled || isHalf ? 'text-secondary' : 'text-gray-300'}`}>
+                                {isHalf ? 'star_half' : 'star'}
+                            </span>
+                        );
+                    })}
+                    <span className="text-xs text-text-muted ml-1">({product.rating.toFixed(1)})</span>
                 </div>
 
-                {/* Add to Cart Button */}
-                <button className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                    <ShoppingBag className="h-5 w-5" />
-                </button>
+                <div className="flex items-center justify-between mt-2">
+                    <div className="flex flex-col">
+                        <span className={`text-xs text-text-muted line-through ${!product.originalPrice && 'opacity-0'}`}>
+                            {product.originalPrice ? `$${product.originalPrice.toFixed(2)}` : '$0.00'}
+                        </span>
+                        <span className="text-lg font-bold text-primary">${product.price.toFixed(2)}</span>
+                    </div>
+                    <button className="w-10 h-10 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all flex items-center justify-center group-hover:w-full group-hover:rounded-lg">
+                        <span className="material-symbols-outlined group-hover:hidden">add</span>
+                        <span className="hidden group-hover:inline text-sm font-bold">Add to Cart</span>
+                    </button>
+                </div>
             </div>
         </div>
     );
-}
+};
+
+export default ProductCard;
