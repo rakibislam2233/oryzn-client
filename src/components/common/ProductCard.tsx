@@ -11,7 +11,7 @@ interface ProductCardProps {
     discount?: number;
 }
 
-export function ProductCard({ name, price, originalPrice, rating, image, category, isNew, discount }: ProductCardProps) {
+export const ProductCard = ({ name, price, originalPrice, rating, image, category, isNew, discount }: ProductCardProps) => {
     return (
         <div className="group relative transition-all hover:shadow-lg hover:shadow-primary/10 rounded-lg p-2">
             {/* Badges */}

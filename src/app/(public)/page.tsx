@@ -1,5 +1,16 @@
-import { HomePage } from "@/components/pages/home/HomePage";
+import FreshVegetables from '@/components/pages/home/FreshVegetables'
+import PromotionBanner from '@/components/pages/home/PromotionBanner'
+import TodayHotSale from '@/components/pages/home/TodayHotSale'
+import React from 'react'
 
-export default function Home() {
-    return <HomePage />;
+const HomePage = () => {
+    return (
+        <section>
+            <PromotionBanner />
+            <TodayHotSale />
+            <FreshVegetables />
+        </section>
+    )
 }
+
+export default HomePage
