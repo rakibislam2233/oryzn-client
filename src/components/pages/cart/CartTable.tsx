@@ -1,3 +1,4 @@
+'use client';
 import { Minus, Plus, X } from 'lucide-react';
 import { useState } from 'react';
 
