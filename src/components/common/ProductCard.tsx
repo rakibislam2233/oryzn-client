@@ -8,37 +8,37 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     return (
-        <div className="bg-surface-light dark:bg-surface-dark rounded-xl border border-gray-100 dark:border-gray-800 p-4 shadow-card hover:shadow-card-hover transition-all duration-300 group relative">
+        <div className="bg-surface-light dark:bg-surface-dark rounded-xl border border-gray-100 dark:border-gray-800 p-4 shadow-sm hover:shadow-xl transition-all duration-300 group relative flex flex-col h-full">
             {product.badge && (
-                <span className={`absolute top-4 left-4 text-white text-[10px] font-bold px-2 py-1 rounded ${product.badge.colorClass} z-10`}>
+                <span className={`absolute top-4 left-4 text-white text-[10px] font-bold px-2.5 py-1 rounded-full ${product.badge.colorClass} z-10 shadow-sm`}>
                     {product.badge.text}
                 </span>
             )}
-            <button className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors z-10">
-                <Heart className="w-5 h-5" />
+            <button className="absolute top-4 right-4 bg-white dark:bg-gray-800 p-2 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all z-10 shadow-sm opacity-0 group-hover:opacity-100 transform translate-y-[-10px] group-hover:translate-y-0 duration-300">
+                <Heart className="w-4 h-4" />
             </button>
 
-            <Link href={`/product/${product.id}`} className="block h-40 w-full mb-4 rounded-lg overflow-hidden bg-white flex items-center justify-center p-2 relative">
+            <Link href={`/product/${product.id}`} className="block relative w-full aspect-square mb-4 rounded-xl overflow-hidden bg-gray-50 dark:bg-gray-800/50 flex items-center justify-center p-6 cursor-pointer">
                 <img
                     src={product.image}
                     alt={product.name}
-                    className="h-full object-contain mix-blend-multiply dark:mix-blend-normal hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal transform group-hover:scale-110 transition-transform duration-500 ease-out"
                 />
             </Link>
 
-            <div className="flex flex-col gap-1">
-                <span className="text-xs text-text-muted">{product.category}</span>
-                <Link href={`/product/${product.id}`} className="font-bold text-text-main dark:text-gray-100 hover:text-primary transition-colors line-clamp-2 min-h-[48px]">
+            <div className="flex flex-col flex-1 gap-2">
+                <span className="text-xs font-medium text-text-muted uppercase tracking-wider">{product.category}</span>
+                <Link href={`/product/${product.id}`} className="font-bold text-base text-text-main dark:text-gray-100 hover:text-primary transition-colors line-clamp-2" title={product.name}>
                     {product.name}
                 </Link>
 
-                <div className="flex items-center gap-1 mb-1">
+                <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map((star) => {
                         const isFilled = star <= Math.floor(product.rating);
                         const isHalf = star === Math.ceil(product.rating) && !Number.isInteger(product.rating);
 
                         return (
-                            <span key={star} className={`${isFilled || isHalf ? 'text-yellow-400' : 'text-gray-300'}`}>
+                            <span key={star} className={`${isFilled || isHalf ? 'text-yellow-400' : 'text-gray-200 dark:text-gray-700'}`}>
                                 {isHalf ? (
                                     <StarHalf className="w-3.5 h-3.5 fill-current" />
                                 ) : (
@@ -47,19 +47,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                             </span>
                         );
                     })}
-                    <span className="text-xs text-text-muted ml-1">({product.rating.toFixed(1)})</span>
+                    <span className="text-xs text-text-muted ml-1 font-medium">({product.rating.toFixed(1)})</span>
                 </div>
 
-                <div className="flex items-center justify-between mt-2">
+                <div className="mt-auto pt-4 flex items-end justify-between gap-2">
                     <div className="flex flex-col">
-                        <span className={`text-xs text-text-muted line-through ${!product.originalPrice && 'opacity-0'}`}>
+                        <span className={`text-xs text-text-muted line-through font-medium ${!product.originalPrice && 'opacity-0'}`}>
                             {product.originalPrice ? `$${product.originalPrice.toFixed(2)}` : '$0.00'}
                         </span>
                         <span className="text-lg font-bold text-primary">${product.price.toFixed(2)}</span>
                     </div>
-                    <button className="w-10 h-10 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all flex items-center justify-center group-hover:w-full group-hover:rounded-lg">
-                        <Plus className="w-5 h-5 group-hover:hidden" />
-                        <span className="hidden group-hover:inline text-sm font-bold ml-1">Add to Cart</span>
+
+                    <button className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 hover:bg-primary hover:text-white text-text-main dark:text-white px-4 py-2 rounded-full font-bold text-sm transition-all shadow-sm hover:shadow-primary/30">
+                        <Plus className="w-4 h-4" />
+                        Add
                     </button>
                 </div>
             </div>
